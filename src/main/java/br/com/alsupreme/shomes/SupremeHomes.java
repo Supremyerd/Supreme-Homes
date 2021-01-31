@@ -29,12 +29,21 @@ public class SupremeHomes extends JavaPlugin{
 		}
 		
 		
-		
 		this.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + "SUPREME SET HOMES ARE BEEN LOADED, VERSION: " + ChatColor.GREEN + this.getDescription().getVersion() + ChatColor.DARK_GRAY + " Created by: Andrey H.");
 		
+		
+		//Start old version suport
+		this.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6|---------------------------------------------------------"));
+		this.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6|             &9&l&OSupreme &a&l&OHomes"));
+		this.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6|     &cYou're using the olded minecraft version support"));
+		this.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6|     &cPlease consider the highest bug probability"));
+		this.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6|      &cIf you encounter it, report in the bukkit page"));
+		this.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&6|---------------------------------------------------------"));
+		//End old version suport
 		startCommands();
 		this.getServer().getPluginManager().registerEvents(new Commands(), this);
 		
+		/*
 		new UpdateChecker(this, 88025).getVersion(Version -> {
 			if (this.getDescription().getVersion().equalsIgnoreCase(Version)){
 			this.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&8No update avaible for &bSupreme &aHomes, &6Current version: &f " + Version));
@@ -42,7 +51,9 @@ public class SupremeHomes extends JavaPlugin{
 			this.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&8Update avaible for &bSupreme &aHomes, &6New version: &f" + Version));
 		}
 		});
+		*/
 		
+		//SoundManager.genConfig();
 		
 		super.onEnable();
 	}

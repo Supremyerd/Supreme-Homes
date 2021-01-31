@@ -220,75 +220,87 @@ public class PublicHomesCommands implements CommandExecutor{
 			if(com.getName().equals("phome")){
 				if(player.hasPermission("suphomes.public.home") || player.hasPermission("suphomes.playerusepublic")) {
 					if(args.length == 2) {
-						FileConfiguration pfileconfig = PublicHomesConfig.loadConfig(args[0]);
-						
-						String nameworld = pfileconfig.getString(args[1] + "." + "world");
-						World world = Bukkit.getServer().getWorld(nameworld);
-						int X = pfileconfig.getInt(args[1] + "." + "X");
-						int Y = pfileconfig.getInt(args[1] + "." + "Y");
-						int Z = pfileconfig.getInt(args[1] + "." + "Z");
-						
-						Location loc = new Location(world, X, Y, Z);
-						
-						
-						
-						
-						if(plugin.getConfig().getBoolean("Delay_teleports")) {
-
-							int CD = 5;
-							HashMap<Player, Integer> counttime = new HashMap<Player, Integer>();
-							HashMap<Player, BukkitRunnable> counttask = new HashMap<Player, BukkitRunnable>();
+						try{
+							FileConfiguration pfileconfig = PublicHomesConfig.loadConfig(args[0]);
 							
-							String nameplayer = player.getName();
+							String nameworld = pfileconfig.getString(args[1] + "." + "world");
+							World world = Bukkit.getServer().getWorld(nameworld);
+							int X = pfileconfig.getInt(args[1] + "." + "X");
+							int Y = pfileconfig.getInt(args[1] + "." + "Y");
+							int Z = pfileconfig.getInt(args[1] + "." + "Z");
 							
-							if(counttime.containsKey(player)) {
-								player.sendMessage("Wait for use this again");
-							}
+							Location loc = new Location(world, X, Y, Z);
 							
-							counttime.put(player, CD);
-							counttask.put(player, new BukkitRunnable() {
+							
+							
+							
+							if(plugin.getConfig().getBoolean("Delay_teleports")) {
+	
+								int CD = 3;
+								HashMap<Player, Integer> counttime = new HashMap<Player, Integer>();
+								HashMap<Player, BukkitRunnable> counttask = new HashMap<Player, BukkitRunnable>();
 								
-								@Override
-								public void run() {
-									if(counttime.get(player).intValue() <= 0) {
-										counttime.remove(player);
-										counttask.remove(player);
-										cancel();
-										player.teleport(loc);
-										String message = ChatColor.translateAlternateColorCodes('&', (String) plugin.getConfig().get("messages.on_player_teleport"));
-										message = message.replace("{player}", nameplayer);
-										message = message.replace("{home}", args[0]);
-										
-										player.sendMessage(message);
-										SoundManager.playSoundHome(player);
-										
-									}else if(counttime.get(player).intValue() > 0) {
-										player.sendMessage("wait: " + counttime.get(player).intValue() + " seconds");
-										counttime.put(player, counttime.get(player).intValue() - 1);
-										SoundManager.playSoundWaitForTp(player);
-									}
-									
+								String nameplayer = player.getName();
+								
+								if(counttime.containsKey(player)) {
+									player.sendMessage("Wait for use this again");
 								}
 								
-							});
+								counttime.put(player, CD);
+								counttask.put(player, new BukkitRunnable() {
+									
+									@Override
+									public void run() {
+										if(counttime.get(player).intValue() <= 0) {
+											counttime.remove(player);
+											counttask.remove(player);
+											cancel();
+											player.teleport(loc);
+											String message = ChatColor.translateAlternateColorCodes('&', (String) plugin.getConfig().get("messages.on_player_teleport"));
+											message = message.replace("{player}", nameplayer);
+											message = message.replace("{home}", args[1]);
+											
+											player.sendMessage(message);
+											SoundManager.playSoundHome(player);
+											
+										}else if(counttime.get(player).intValue() > 0) {
+											player.sendMessage("wait: " + counttime.get(player).intValue() + " seconds");
+											counttime.put(player, counttime.get(player).intValue() - 1);
+											SoundManager.playSoundWaitForTp(player);
+										}
+										
+									}
+									
+								});
+								
+								counttask.get(player).runTaskTimer(plugin, 0L, 20L);
+	
+						}else {
+								player.teleport(loc);
+								String message = ChatColor.translateAlternateColorCodes('&', (String) plugin.getConfig().get("messages.on_player_teleport_public_home"));
+								message = message.replace("{player}", playername);
+								message = message.replace("{publichome}", args[1]);
+								message = message.replace("{homeplayer}", args[0]);
+								
+								player.sendMessage(message);
+								
+								SoundManager.playSoundHome(player);
+							}
+						}catch(Exception e) {
 							
-							counttask.get(player).runTaskTimer(plugin, 0L, 20L);
-
-					}else {
-							player.teleport(loc);
-							String message = ChatColor.translateAlternateColorCodes('&', (String) plugin.getConfig().get("messages.on_player_teleport_public_home"));
-							message = message.replace("{player}", playername);
-							message = message.replace("{publichome}", args[1]);
-							message = message.replace("{homeplayer}", args[0]);
-							
-							player.sendMessage(message);
-							
-							SoundManager.playSoundHome(player);
+							plugin.getServer().getConsoleSender().sendMessage("error teleport player " + playername + "error:  " + e);
+							SoundManager.playSoundError(player);
+							if(!PublicHomesConfig.loadConfig(args[0]).contains(args[1])) {
+								player.sendMessage("Home inexistente");
+							}else {
+								player.sendMessage("An error has occurred  in your teleport");
+							}
 						}
 					}else {
 						player.sendMessage("The correct use of this command is /phome <nameofplayer> <homename>");
 						SoundManager.playSoundError(player);
 					}
+				
 				}
 			}
 			

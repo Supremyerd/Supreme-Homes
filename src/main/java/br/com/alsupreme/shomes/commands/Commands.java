@@ -251,7 +251,7 @@ public class Commands implements CommandExecutor, Listener{
 						
 						if(plugin.getConfig().getBoolean("Delay_teleports")) {
 							
-							int CD = 5;
+							int CD = 3;
 							HashMap<Player, Integer> counttime = new HashMap<Player, Integer>();
 							HashMap<Player, BukkitRunnable> counttask = new HashMap<Player, BukkitRunnable>();
 							

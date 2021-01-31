@@ -1,0 +1,11 @@
+
+      #AMBIENT_BASALT_DELTAS_ADDITIONS = 1
+
+CustomSound: false
+
+sethome: 1
+home: 1
+delhome: 1
+homes: 1
+error: 1
+waitingtime: 1

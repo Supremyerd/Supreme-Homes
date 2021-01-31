@@ -1,9 +1,9 @@
 name: SupremeHomes
 main: main.java.br.com.alsupreme.shomes.SupremeHomes
 version: 1.1.0
-api-version: 1.16
+api-version: 1.13
 description: A set homes plugin for your's servers, this plugin contain a public set homes too, very useful for player shops
-load: startup
+load: POSTWORLD
 author: Andrey
 prefix: SHOMES
 
